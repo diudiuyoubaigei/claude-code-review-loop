@@ -1,0 +1,20 @@
+{
+  "name": "claude-code-review-loop",
+  "interface": {
+    "displayName": "Claude Code Review Loop"
+  },
+  "plugins": [
+    {
+      "name": "claude-code-review-loop",
+      "source": {
+        "source": "local",
+        "path": "./plugins/claude-code-review-loop"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
