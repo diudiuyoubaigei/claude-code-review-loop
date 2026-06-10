@@ -1,4 +1,4 @@
 interface:
   display_name: "Claude Code Review Loop"
   short_description: "Use Claude Code CLI, then review diffs."
-  default_prompt: "Use normal Claude Code CLI as the implementation executor. Codex should plan briefly, dispatch scoped tasks, review actual diffs, reject flawed attempts, run validation, and only accept passing work."
+  default_prompt: "Use normal Claude Code CLI as the implementation executor. Give Claude Code a long timeout, retry once if needed, review actual diffs, reject flawed attempts, run validation, and only accept passing work."

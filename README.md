@@ -95,8 +95,37 @@ plugins/
 核心脚本只有一件事：在目标项目目录里执行普通 Claude Code CLI。
 
 ```powershell
-claude --permission-mode acceptEdits -p "<task prompt>"
+claude --permission-mode bypassPermissions -p "<task prompt>"
 ```
+
+## 等待时间和权限
+
+Claude Code 在真实项目里可能跑很久，尤其是需要读代码、改多文件、跑测试的时候。这个插件默认给 Claude Code 更长的执行窗口：
+
+```powershell
+& ".\plugins\claude-code-review-loop\skills\claude-code-review-loop\scripts\dispatch-claude.ps1" `
+  -WorkingDirectory "C:\path\to\your\repo" `
+  -Prompt "修复这个问题，并运行相关验证" `
+  -TimeoutSeconds 7200 `
+  -RetryCount 1 `
+  -PermissionMode bypassPermissions
+```
+
+默认策略：
+
+- `TimeoutSeconds = 7200`：最多等待 2 小时。
+- `RetryCount = 1`：超时后自动重试 1 次。
+- `PermissionMode = bypassPermissions`：尽量避免 Claude Code 因权限确认卡住。
+
+如果你希望更保守，可以改成：
+
+```powershell
+-PermissionMode acceptEdits
+```
+
+拍教程时建议强调：`bypassPermissions` 适合你信任的本地项目；不熟悉的仓库、第三方代码或敏感目录建议用 `acceptEdits`。
+
+Codex 调用这个脚本时，也要给工具本身设置足够长的 timeout。不要用默认的短等待时间，否则 Codex 可能会误判“Claude 卡住了”。
 
 ## 设计取舍
 
@@ -115,6 +144,8 @@ claude --permission-mode acceptEdits -p "<task prompt>"
 - 这个插件的目标是节省 Codex 上下文，不是让 Codex 放弃审查。
 - Claude Code 负责实现，但最终责任仍在 Codex 的 diff review 和测试。
 - 第一次使用前一定要确认 `claude --version` 可用。
+- Claude Code 可能需要 30 分钟到 2 小时，不要太早判定失败。
+- 为了减少卡权限，默认使用 `bypassPermissions`；演示时要提醒只在可信项目中使用。
 - 如果项目很大，Codex 应该先给 Claude Code 明确文件范围和验收标准。
 - 不建议让 Claude Code 自动提交或部署；这些动作最好由 Codex 最后确认。
 
