@@ -16,6 +16,12 @@ Use normal Claude Code CLI, like a human would from the terminal.
 & "<skill_dir>\scripts\dispatch-claude.ps1" -WorkingDirectory "<repo>" -Prompt "<task prompt>" -TimeoutSeconds 7200 -RetryCount 1 -PermissionMode bypassPermissions
 ```
 
+在 macOS/Linux 上使用 shell 版本：
+
+```bash
+"<skill_dir>/scripts/dispatch-claude.sh" -d "<repo>" -p "<task prompt>" -t 7200 -r 1 -m bypassPermissions
+```
+
 3. Claude Code may inspect files, edit code, and run focused validation.
 4. Codex reviews the real working-tree diff and chooses/runs final validation.
 5. If the diff has bugs, unrelated churn, broad refactors, missing error handling, or failed validation, Codex rejects it with specific feedback and dispatches a correction.
